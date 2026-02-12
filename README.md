@@ -13,7 +13,7 @@ Project demonstrates the complete ML → MLOps cycle: data → model → API →
 
 ## Technologies used
 - Python 3.11
-- scikit-learn
+- scikit-learn 
 - Pandas
 - FastAPI
 - Joblib
