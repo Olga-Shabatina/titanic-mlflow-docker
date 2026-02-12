@@ -1,8 +1,8 @@
+MALE = 0
+FEMALE = 1
+
 def preprocess(data: dict):
-    processed = {
-        "pclass": data["pclass"],
-        "sex": 0 if data["sex"].lower() == "male" else 1,
-        "age": data["age"],
-        "fare": data["fare"]
-    }
-    return [list(processed.values())]
+    sex = data["sex"]
+    if isinstance(sex, str):
+        sex = MALE if sex.lower() == "male" else FEMALE
+    return [[data["pclass"], sex, data["age"], data["fare"]]]
