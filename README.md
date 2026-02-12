@@ -35,6 +35,47 @@ uvicorn app.main:app --reload
 docker build -t titanic-api .
 docker run -p 8000:8000 titanic-api
 ```
+### Test the API
+
+#### Swagger UI
+
+1. Open  browser and go to: http://127.0.0.1:8000/docs
+
+2. Click on the `/predict` endpoint
+
+3. Click "Try it out"
+
+4. Paste the JSON example into the request body
+
+5. Click "Execute"
+
+Example response:
+
+```
+{
+  "Survived": 0
+}
+```
+where `1` = survived, `0` = did not survive.
+
+### Curl
+
+Linux:
+```bash
+curl -s -X POST "http://127.0.0.1:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"pclass":3,"sex":0,"age":25,"fare":8.05}' \
+     -w "\n"
+```
+
+PowerShell (Windows):
+```shell
+Invoke-RestMethod `
+   -Method POST `
+   -Uri "http://127.0.0.1:8000/predict" `
+   -ContentType "application/json" `
+   -Body '{"pclass":1,"sex":0,"age":22,"fare":7.25}'
+```
 
 ## API Request Example
 
