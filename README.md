@@ -11,7 +11,7 @@ A machine learning pet project that predicts Titanic passenger survival using Ra
 
 ### Local Setup
 ```bash
-git clone <repo>
+git clone https://github.com/Olga-Shabatina/titanic-mlflow-docker.git
 pip install -r requirements.txt
 python train.py
 uvicorn app.main:app --reload
