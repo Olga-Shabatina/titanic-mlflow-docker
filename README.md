@@ -24,7 +24,7 @@ Project demonstrates the complete ML → MLOps cycle: data → model → API →
 ### Local Setup
 ```bash
 git clone https://github.com/Olga-Shabatina/titanic-mlflow-sklearn-docker.git
-cd titanic-mlflow-docker
+cd titanic-mlflow-sklearn-docker
 pip install -r requirements.txt
 python train.py
 uvicorn app.main:app --reload
