@@ -49,16 +49,9 @@ docker run -p 8000:8000 titanic-api
 
 5. Click "Execute"
 
-Example response:
-
-```
-{
-  "Survived": 0
-}
-```
-where `1` = survived, `0` = did not survive.
-
 ### Curl
+
+Run the following `curl` command in a terminal.
 
 Linux:
 ```bash
@@ -82,19 +75,20 @@ Invoke-RestMethod `
 **POST** `/predict`
 ```json
 {
-  "pclass": 3,
+  "pclass": 1,
   "sex": "0",
   "age": 25,
   "sibsp": 0,
   "parch": 0,
-  "fare": 8.05,
+  "fare": 28.05,
   "embarked": "S"
 }
 ```
 **Response:**
 ```json
 {
-  "survived": 0,
-  "probability": 0.21
+  "Survived": 1,
+  "Probability": 0.6
 }
 ```
+where `1` = survived, `0` = did not survive.

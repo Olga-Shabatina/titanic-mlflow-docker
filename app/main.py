@@ -18,7 +18,16 @@ def predict(passenger: Passenger):
     try:
         X = preprocess(passenger.model_dump())
         pred = model.predict(X)
-        return {"Survived": int(pred[0])}
+
+        if hasattr(model, "predict_proba"):
+            prob = model.predict_proba(X)[0][1]  # вероятность выжить
+        else:
+            prob = None
+        
+        return {
+            "Survived": int(pred[0]),
+            "Probability": round(prob, 2) if prob is not None else None
+        }
     except ValidationError as e:
         raise HTTPException(status_code=422, detail=e.errors())
     except KeyError as e:
