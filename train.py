@@ -3,6 +3,7 @@ from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+import joblib
 
 RANDOM_FOREST_N_ESTIMATORS = 100
 
@@ -29,3 +30,5 @@ model.fit(X_train, y_train)
 
 predictions = model.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, predictions))
+
+joblib.dump(model, "app/model.pkl")
