@@ -1,17 +1,30 @@
 # Titanic RandomForest ML API
 
-A machine learning pet project that predicts Titanic passenger survival using RandomForest. Model inference is served via FastAPI, containerized with Docker.
+A machine learning pet project in Python with RandomForest trained on the Titanic dataset.
 
-## Features
-- Trained RandomForest classifier on Titanic dataset
-- REST API endpoint for predictions (`/predict`)
-- Containerized with Docker for easy deployment
+The project includes:
+
+- Model training (train.py)
+- Simple inference API via FastAPI (app/main.py)
+- Input data preprocessing (app/preprocess.py)
+- Docker container for easy deployment
+
+Project demonstrates the complete ML → MLOps cycle: data → model → API → Docker.
+
+## Technologies used
+- Python 3.11
+- scikit-learn
+- Pandas
+- FastAPI
+- Joblib
+- Docker
 
 ## How to Run
 
 ### Local Setup
 ```bash
 git clone https://github.com/Olga-Shabatina/titanic-mlflow-docker.git
+cd titanic-mlflow-docker
 pip install -r requirements.txt
 python train.py
 uvicorn app.main:app --reload
