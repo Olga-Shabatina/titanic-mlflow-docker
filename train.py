@@ -3,7 +3,6 @@ from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
-# import joblib
 import skops.io as skops
 import mlflow
 import mlflow.sklearn
@@ -40,6 +39,6 @@ with mlflow.start_run():
     print("Accuracy:", accuracy)
 
     mlflow.log_metric("accuracy", accuracy)
-    mlflow.sklearn.log_model(model, "model")
+    mlflow.sklearn.log_model(sk_model=model, name="model")
 
     skops.dump(model, "app/model.skops")

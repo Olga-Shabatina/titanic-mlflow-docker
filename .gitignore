@@ -2,6 +2,7 @@
 *.pkl
 mlflow.db
 mlruns/
+model.skops
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
