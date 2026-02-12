@@ -13,4 +13,4 @@ df['sex'] = df['sex'].map({'male': 0, 'female': 1})
 # features matrix
 X = df[['pclass', 'sex', 'age', 'fare']]
 # target vector
-y = df['survivev'].astype(int)
+y = df['survived'].astype(int)
