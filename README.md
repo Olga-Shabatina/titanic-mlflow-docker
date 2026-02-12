@@ -42,7 +42,7 @@ docker run -p 8000:8000 titanic-api
 ```json
 {
   "pclass": 3,
-  "sex": "male",
+  "sex": "0",
   "age": 25,
   "sibsp": 0,
   "parch": 0,
