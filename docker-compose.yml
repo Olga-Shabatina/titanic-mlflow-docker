@@ -1,0 +1,36 @@
+services:
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.mlflow
+    container_name: mlflow_server
+    environment:
+      - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000,titanic_api:*,mlflow:*,localhost:*,127.0.0.1:*
+    volumes:
+      - mlflow_data:/mlflow
+    ports:
+      - "5000:5000"
+
+  api:
+    build: .
+    container_name: titanic_api
+    depends_on:
+      - mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "
+        echo 'Waiting for MLflow...' &&
+        until curl -s http://mlflow:5000 > /dev/null; do
+          sleep 2;
+        done &&
+        echo 'MLflow is ready!' &&
+        python train.py &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000
+      "
+
+volumes:
+  mlflow_data:

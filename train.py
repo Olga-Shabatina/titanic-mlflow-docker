@@ -26,6 +26,7 @@ y = df['survived'].astype(int)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
 
+mlflow.set_tracking_uri("http://mlflow:5000")
 mlflow.set_experiment("Titanic_Classification")
 
 # train model

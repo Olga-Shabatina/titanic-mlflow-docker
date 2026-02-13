@@ -11,12 +11,15 @@ The project includes:
 
 Project demonstrates the complete ML → MLOps cycle: data → model → API → Docker.
 
+-> MLflow as a tracking server with SQLite backend inside Docker Compose.
+
 ## Technologies used
 - Python 3.11
 - scikit-learn 
 - Pandas
 - FastAPI
-- Joblib
+- Skops
+- MLflow
 - Docker
 
 ## How to Run
@@ -32,7 +35,8 @@ uvicorn app.main:app --reload
 
 ### Run with Docker
 ```bash
-docker build -t titanic-api .
+# docker build -t titanic-api .
+docker-compose up --build
 docker run -p 8000:8000 titanic-api
 ```
 ### Test the API
