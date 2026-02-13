@@ -32,12 +32,14 @@ pip install -r requirements.txt
 python train.py
 uvicorn app.main:app --reload
 ```
+Run local MLflow server
+```
+mlflow ui
+```
 
 ### Run with Docker
 ```bash
-# docker build -t titanic-api .
 docker-compose up --build
-docker run -p 8000:8000 titanic-api
 ```
 ### Test the API
 
@@ -96,3 +98,5 @@ Invoke-RestMethod `
 }
 ```
 where `1` = survived, `0` = did not survive.
+
+## MLflow

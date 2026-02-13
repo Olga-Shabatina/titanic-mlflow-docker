@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile.mlflow
     container_name: mlflow_server
     environment:
-      - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000,titanic_api:*,mlflow:*,localhost:*,127.0.0.1:*
+      - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000
     volumes:
       - mlflow_data:/mlflow
     ports:
