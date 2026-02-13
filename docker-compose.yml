@@ -8,7 +8,8 @@ services:
     environment:
       - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000,localhost:5000
     volumes:
-      - mlflow_data:/mlflow
+      - mlflow_db:/mlflow/db
+      - mlflow_artifacts:/mlflow/artifacts
     ports:
       - "5000:5000"
     healthcheck:
@@ -53,5 +54,6 @@ services:
       "
 
 volumes:
-  mlflow_data:
+  mlflow_db:
+  mlflow_artifacts:
   model_data:

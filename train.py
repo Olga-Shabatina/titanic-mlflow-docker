@@ -10,6 +10,14 @@ import mlflow.sklearn
 
 RANDOM_FOREST_N_ESTIMATORS = 100
 
+MODEL_PATH = os.getenv("MODEL_PATH", "app/models/model.skops")
+FORCE_RETRAIN = os.getenv("FORCE_RETRAIN", "false").lower() == "true"
+
+if os.path.exists(MODEL_PATH) and not FORCE_RETRAIN:
+    print("Model already exists, skipping training")
+    exit(0)
+else: os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+
 # load data
 titanic = fetch_openml("titanic", version=1, as_frame=True)
 df = titanic.frame
@@ -43,6 +51,4 @@ with mlflow.start_run():
     mlflow.log_metric("accuracy", accuracy)
     mlflow.sklearn.log_model(sk_model=model, name="model")
 
-    MODEL_PATH = os.getenv("MODEL_PATH", "app/models/model.skops")
-    os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
     skops.dump(model, MODEL_PATH)
