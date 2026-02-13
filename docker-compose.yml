@@ -18,21 +18,40 @@ services:
       retries: 5
       start_period: 30s
 
+  trainer:
+    build: .
+    container_name: trainer
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    environment:
+      - MODEL_PATH=/models/model.skops
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    volumes:
+      - model_data:/models
+    command: ["python", "train.py"]
+    restart: "no"
+
   api:
     build: .
     container_name: titanic_api
     depends_on:
       mlflow:
         condition: service_healthy
+      trainer:
+        condition: service_completed_successfully
     environment:
+      - MODEL_PATH=/models/model.skops
       - MLFLOW_TRACKING_URI=http://mlflow:5000
     ports:
       - "8000:8000"
+    volumes:
+      - model_data:/models
     command: >
       sh -c "
-        python train.py &&
         uvicorn app.main:app --host 0.0.0.0 --port 8000
       "
 
 volumes:
   mlflow_data:
+  model_data:

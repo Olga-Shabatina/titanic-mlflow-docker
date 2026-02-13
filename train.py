@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
@@ -42,4 +43,6 @@ with mlflow.start_run():
     mlflow.log_metric("accuracy", accuracy)
     mlflow.sklearn.log_model(sk_model=model, name="model")
 
-    skops.dump(model, "app/model.skops")
+    MODEL_PATH = os.getenv("MODEL_PATH", "app/models/model.skops")
+    os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+    skops.dump(model, MODEL_PATH)

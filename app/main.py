@@ -1,12 +1,13 @@
+import os
 from fastapi import FastAPI, HTTPException
-# import joblib
 import skops.io as skops
 from app.preprocess import preprocess
 from sklearn.base import BaseEstimator
 from pydantic import BaseModel, Field, ValidationError
 
 app = FastAPI()
-model: BaseEstimator = skops.load("app/model.skops")
+MODEL_PATH = os.getenv("MODEL_PATH", "app/models/model.skops")
+model: BaseEstimator = skops.load(MODEL_PATH)
 
 class Passenger(BaseModel):
     pclass: int = Field(..., ge = 1, le = 3, description = "class: 1, 2, 3")
