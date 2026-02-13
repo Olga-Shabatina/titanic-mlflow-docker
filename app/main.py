@@ -1,13 +1,19 @@
 import os
+from app.preprocess import preprocess
 from fastapi import FastAPI, HTTPException
 import skops.io as skops
-from app.preprocess import preprocess
+import mlflow.sklearn
 from sklearn.base import BaseEstimator
 from pydantic import BaseModel, Field, ValidationError
 
 app = FastAPI()
-MODEL_PATH = os.getenv("MODEL_PATH", "app/models/model.skops")
-model: BaseEstimator = skops.load(MODEL_PATH)
+
+# MODEL_PATH = os.getenv("MODEL_PATH", "app/models/model.skops")
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow:5000")
+MODEL_URI = os.getenv("MODEL_URI", "models:/titanic/latest")
+
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+model: BaseEstimator = mlflow.sklearn.load_model(MODEL_URI)
 
 class Passenger(BaseModel):
     pclass: int = Field(..., ge = 1, le = 3, description = "class: 1, 2, 3")

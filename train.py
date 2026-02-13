@@ -7,8 +7,6 @@ from sklearn.metrics import accuracy_score
 import skops.io as skops
 import mlflow
 import mlflow.sklearn
-# import boto3
-# from botocore.exceptions import ClientError
 
 RANDOM_FOREST_N_ESTIMATORS = 100
 
@@ -51,6 +49,10 @@ with mlflow.start_run():
     print("Accuracy:", accuracy)
 
     mlflow.log_metric("accuracy", accuracy)
-    mlflow.sklearn.log_model(sk_model=model, name="model")
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        name="model",
+        registered_model_name="titanic"
+    )
 
-    skops.dump(model, MODEL_PATH)
+    # skops.dump(model, MODEL_PATH)

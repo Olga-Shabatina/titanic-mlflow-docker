@@ -20,6 +20,8 @@ Project demonstrates the complete ML → MLOps cycle: data → model → API →
 - FastAPI
 - Skops
 - MLflow
+- minIO
+- POSTGRES
 - Docker
 
 ## How to Run
@@ -99,4 +101,17 @@ Invoke-RestMethod `
 ```
 where `1` = survived, `0` = did not survive.
 
-## MLflow
+## Training and model flow
+
+### trainer
+
+1. Trains the model
+2. Registers the model in the `MLflow Registry`
+
+### api
+
+1. On startup automatically download the latest model version from MLflow:
+```
+models:/titanic/latest
+```
+2. Model is loaded directly from `minIO`
