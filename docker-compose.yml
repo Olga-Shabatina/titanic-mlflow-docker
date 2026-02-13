@@ -6,28 +6,30 @@ services:
       dockerfile: Dockerfile.mlflow
     container_name: mlflow_server
     environment:
-      - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000
+      - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000,localhost:5000
     volumes:
       - mlflow_data:/mlflow
     ports:
       - "5000:5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   api:
     build: .
     container_name: titanic_api
     depends_on:
-      - mlflow
+      mlflow:
+        condition: service_healthy
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
     ports:
       - "8000:8000"
     command: >
       sh -c "
-        echo 'Waiting for MLflow...' &&
-        until curl -s http://mlflow:5000 > /dev/null; do
-          sleep 2;
-        done &&
-        echo 'MLflow is ready!' &&
         python train.py &&
         uvicorn app.main:app --host 0.0.0.0 --port 8000
       "
