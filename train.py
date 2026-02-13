@@ -7,6 +7,8 @@ from sklearn.metrics import accuracy_score
 import skops.io as skops
 import mlflow
 import mlflow.sklearn
+# import boto3
+# from botocore.exceptions import ClientError
 
 RANDOM_FOREST_N_ESTIMATORS = 100
 
