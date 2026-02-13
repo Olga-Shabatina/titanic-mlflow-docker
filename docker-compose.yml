@@ -1,5 +1,22 @@
 services:
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    user: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   minio:
     image: minio/minio
     container_name: minio
@@ -42,17 +59,25 @@ services:
       dockerfile: Dockerfile.mlflow
     container_name: mlflow_server
     depends_on:
-      minio:
+      postgres:
         condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
     environment:
       - MLFLOW_SERVER_ALLOWED_HOSTS=mlflow:5000,localhost:5000
       - AWS_ACCESS_KEY_ID=${MINIO_USER}
       - AWS_SECRET_ACCESS_KEY=${MINIO_PASSWORD}
       - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-    volumes:
-      - mlflow_db:/mlflow/db
+      - MLFLOW_ENABLE_HUEY_SCHEDULER=false
     ports:
       - "5000:5000"
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      --artifacts-destination s3://mlflow/artifacts
+    # --default-artifact-root /mlflow/artifacts
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000')"]
       interval: 10s
@@ -73,6 +98,7 @@ services:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
       - AWS_ACCESS_KEY_ID=${MINIO_USER}
       - AWS_SECRET_ACCESS_KEY=${MINIO_PASSWORD}
+      # - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
     volumes:
       - model_data:/models
     command: ["python", "train.py"]
@@ -99,6 +125,7 @@ services:
       "
 
 volumes:
-  mlflow_db:
+  postgres_data:
+  # mlflow_db:
   minio_data:
   model_data:
